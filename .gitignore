@@ -1,0 +1,54 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Dependency directories
+node_modules/
+dist/
+dist-ssr/
+target/
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+
+# TypeScript specific
+*.tsbuildinfo
+
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven specific
+.mvn/
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+
+# Tailwind specific
+tailwind.config.js
+tailwind.config.cjs
+postcss.config.js
+
+# Vue specific
+public/
+.vuepress/dist/
+.vuepress/.temp/
+.vuepress/.cache/
+.nuxt/
+output/
+
+# IntelliJ specific
+*.iws
+*.ipr
+*.iml
+out/
