@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import user from "../userStorage.ts";
 import Popper from "vue3-popper";
 import api from "../apiService.ts";
 import router from "../router.ts";
+import user from "../UserStorage.ts";
 
 const logout = async () => {
   try {

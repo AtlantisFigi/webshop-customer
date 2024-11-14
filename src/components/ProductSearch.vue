@@ -152,6 +152,7 @@ import { ref, computed, watch, onMounted } from "vue";
 import api from "../apiService.ts";
 import { useRouter, useRoute } from "vue-router";
 import {assignSelectedCategories} from "../categoryMappings.ts";
+import {Product} from "../Product.ts";
 
 const router = useRouter();
 const route = useRoute();
@@ -160,7 +161,7 @@ const searchTerm = ref<string>('');
 const selectedCategories = ref<string[]>([]);
 const selectedGenderCategory = ref<string>("");
 const selectedSubCategory = ref<string>("");
-const products = ref([]);
+const products = ref<Product[]>([]);
 const errorMessage = ref('');
 const isLoading = ref(false);
 const sortOption = ref('none');
@@ -230,8 +231,8 @@ onMounted(() => {
   const categoriesFromQuery = route.query.categories;
   if (categoriesFromQuery) {
     selectedCategories.value = Array.isArray(categoriesFromQuery)
-        ? categoriesFromQuery
-        : [categoriesFromQuery];
+        ? categoriesFromQuery.filter((category): category is string => typeof category === 'string')
+        : [categoriesFromQuery].filter((category): category is string => typeof category === 'string');
   } else {
     selectedCategories.value = [];
   }

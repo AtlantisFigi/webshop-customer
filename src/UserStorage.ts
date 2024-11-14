@@ -7,7 +7,7 @@ export type LocalUser = {
     email: string;
 }
 
-const user = useStorage<LocalUser>(
+const user = useStorage<LocalUser | null>(
     'user',
     null,
     localStorage,

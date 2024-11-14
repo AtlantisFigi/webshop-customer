@@ -1,26 +1,28 @@
 <script setup lang="ts">
-import {PropType} from "vue";
 import Popper from "vue3-popper";
+import { defineProps } from "vue";
 
+interface Item {
+  label: string;
+  route: string;
+}
 
-const props = defineProps({
-  label: String,
-  items: Array,
-});
+defineProps<{
+  items: Item[];
+}>();
 </script>
 
 <template>
   <Popper class="content-center">
     <router-link
-    v-for="item in items"
-    :key="item.label"
-    :to="item.route"
+        v-for="item in items"
+        :key="item.label"
+        :to="item.route"
     >
-      {{item.label}}
+      {{ item.label }}
     </router-link>
   </Popper>
 </template>
 
 <style scoped>
-
 </style>

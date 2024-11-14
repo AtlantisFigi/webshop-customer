@@ -33,7 +33,7 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
     if (to.path === "/login" && user.value) {
         next({
             path: '/',
@@ -41,16 +41,15 @@ router.beforeEach((to, from, next) => {
         });
         return
     }
-    if (to.meta.requireAuth && !user.value) {
+    else if (to.meta.requireAuth && !user.value) {
         next({
             path: '/login',
             replace: true,
-            cause: new Error('Not logged in'),
-            message: 'Not logged in',
         })
     }
-
-    next()
+    else {
+        next();
+    }
 })
 
 export default router;

@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { XMarkIcon, Bars3Icon } from '@heroicons/vue/24/solid'
 import UserPopper from "./UserPopper.vue";
 import user from "../UserStorage.ts";
-import Dropdown from "./Dropdown.vue";
 
 const showSidebar = ref(false);
 

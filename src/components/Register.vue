@@ -12,7 +12,7 @@
   const handleRegistration = async () => {
     try {
       if (password.value === confirmPassword.value) {
-        const response = await api.post('api/auth/register', {
+        await api.post('api/auth/register', {
           firstName: firstName.value,
           lastName: lastName.value,
           prefix: prefix.value,
