@@ -1,34 +1,40 @@
 <script setup lang="ts">
-  import api from "../apiService.ts";
-  import {ref} from "vue";
+import api from "../apiService.ts";
+import { ref } from "vue";
+import user from "../UserStorage.ts";
+import router from "../router.ts";
 
-  const email = ref('');
-  const password = ref('');
+const email = ref('');
+const password = ref('');
 
-  const handleLogin = async () => {
-    try {
-      const response = await api.post('api/auth/login', {
-        email: email.value,
-        password: password.value
-      })
+const handleLogin = async () => {
+  try {
+    const response = await api.post('api/auth/login', {
+      email: email.value,
+      password: password.value
+    });
 
-      localStorage.setItem('token', response.data.token)
-      sessionStorage.setItem('user', JSON.stringify(response.data.user))
-
-      alert('Login successfully!')
+    user.value = {
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      infix: response.data.prefix,
+      email: response.data.email,
     }
-    catch (error) {
-      alert(error);
-    }
+
+    await router.push('/')
+
+    alert('Login successfully!');
+  } catch (error) {
+    alert(error);
   }
+}
 </script>
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="bg-white/60 backdrop-blur-lg p-8 rounded-lg shadow-lg max-w-md w-full">
-      <h2 class="text-2xl font-semibold text-gray-900 text-center mb-6">Inloggen</h2>
+    <div class="bg-white/90 backdrop-blur-lg p-8 rounded-lg shadow-lg max-w-md w-full">
+      <h2 class="text-3xl font-semibold text-gray-900 text-center mb-6">Inloggen</h2>
       <form @submit.prevent="handleLogin" class="space-y-6">
-        <!-- Email Field -->
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">Emailadres</label>
           <div class="mt-1">
@@ -43,7 +49,6 @@
           </div>
         </div>
 
-        <!-- Password Field -->
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700">Wachtwoord</label>
           <div class="mt-1">
@@ -58,7 +63,6 @@
           </div>
         </div>
 
-        <!-- Login Button -->
         <div>
           <button
               type="submit"
@@ -69,7 +73,6 @@
         </div>
       </form>
 
-      <!-- Register Link -->
       <p class="mt-6 text-center text-gray-500">
         Nog geen account?
         <router-link to="/register" class="text-indigo-600 hover:text-indigo-400 transition">
@@ -79,7 +82,3 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
