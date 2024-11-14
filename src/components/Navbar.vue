@@ -1,49 +1,56 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { XMarkIcon, Bars3Icon } from '@heroicons/vue/24/solid'
+import UserPopper from "./UserPopper.vue";
+import user from "../UserStorage.ts";
+import Dropdown from "./Dropdown.vue";
 
-const isMobileMenuOpen = ref(false);
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value;
+const showSidebar = ref(false);
+
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value;
 }
 </script>
 
 <template>
-  <nav class="bg-white/60 backdrop-blur-md shadow-md">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-      <!-- Logo / Title -->
-      <div class="text-xl font-semibold text-gray-900 tracking-wide">
-        <router-link to="/" class="hover:text-gray-700 transition">Webshop</router-link>
-      </div>
-
-      <!-- Desktop Menu -->
-      <div class="hidden md:flex space-x-6 items-center">
-        <router-link to="/products" class="text-gray-900 hover:text-gray-700 transition">Producten</router-link>
-        <router-link to="/about" class="text-gray-900 hover:text-gray-700 transition">Over</router-link>
-        <router-link to="/contact" class="text-gray-900 hover:text-gray-700 transition">Contact</router-link>
-        <router-link to="/login" class="text-gray-900 hover:text-gray-700 transition">Inloggen</router-link>
-        <router-link to="/register" class="text-white bg-black px-4 py-2 rounded-full hover:bg-gray-900 transition">Registreren</router-link>
-      </div>
-
-      <!-- Hamburger Menu Icon for Mobile -->
-      <button @click="toggleMobileMenu" class="md:hidden text-gray-900 focus:outline-none">
-        <span class="material-icons text-3xl">menu</span>
+  <nav class="bg-gray-100 text-black shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <button @click="toggleSidebar" class="block md:hidden text-black ml-4">
+        <Bars3Icon class="w-6 h-6 text-black" />
       </button>
+
+      <div class="flex space-x-6 items-center">
+
+      </div>
+
+      <!-- Logo in het midden -->
+      <div class="flex-grow text-center">
+        <router-link to="/" class="text-xl font-bold tracking-wide hover:text-gray-300 transition">OBSIDIAN</router-link>
+      </div>
+
+      <!-- Account en Cart rechts -->
+      <div class="flex space-x-6 items-center">
+        <UserPopper :user="user"/>
+        <router-link to="/cart" class="hover:text-black transition">Cart</router-link>
+      </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <div v-if="isMobileMenuOpen" class="md:hidden bg-white/90 backdrop-blur-md shadow-lg">
-      <div class="flex flex-col space-y-2 py-2">
-        <router-link to="/products" class="text-gray-900 px-4 py-2 hover:bg-gray-200 transition">Producten</router-link>
-        <router-link to="/about" class="text-gray-900 px-4 py-2 hover:bg-gray-200 transition">Over</router-link>
-        <router-link to="/contact" class="text-gray-900 px-4 py-2 hover:bg-gray-200 transition">Contact</router-link>
-        <router-link to="/login" class="text-gray-900 px-4 py-2 hover:bg-gray-200 transition">Inloggen</router-link>
-        <router-link to="/register" class="text-white bg-black px-4 py-2 rounded-full mx-4 mt-2 hover:bg-gray-800 transition">Registreren</router-link>
+    <!-- Mobile Sidebar Menu -->
+    <div v-if="showSidebar" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50">
+      <div class="w-64 bg-white h-full p-4 flex flex-col shadow-lg rounded-t-lg">
+        <button @click="toggleSidebar" class="self-end mb-4">
+          <XMarkIcon class="w-6 h-6 text-black" />
+        </button>
+        <router-link to="/account" class="py-2 border-b border-gray-300 hover:bg-gray-200 transition" @click="toggleSidebar">Account</router-link>
+        <router-link to="/cart" class="py-2 border-b border-gray-300 hover:bg-gray-200 transition" @click="toggleSidebar">Cart</router-link>
       </div>
     </div>
   </nav>
 </template>
 
-
 <style scoped>
-
+/* Optionele stijl voor smooth transitions */
+.fixed {
+  transition: transform 0.3s ease-in-out;
+}
 </style>
