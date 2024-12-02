@@ -2,6 +2,7 @@ import { createRouter, createWebHistory} from "vue-router";
 import Register from "./components/Register.vue";
 import Login from "./components/Login.vue";
 import ProductSearch from "./components/ProductSearch.vue";
+import ProductDetails from "./components/ProductDetails.vue";
 import user from "./UserStorage.ts";
 
 const routes = [
@@ -15,6 +16,13 @@ const routes = [
     {
         path: '/login',
         component: Login,
+        meta: {
+            requireAuth: false
+        },
+    },
+    {
+        path: "/:id",
+        component: ProductDetails,
         meta: {
             requireAuth: false
         },
