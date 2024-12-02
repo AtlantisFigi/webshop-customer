@@ -2,16 +2,16 @@ import { Client, IMessage } from "@stomp/stompjs";
 
 class WebSocketService {
     private client: Client;
-    private subscriptions: Map<string, (message: any) => void>;
+    private subscriptions: Map<string, { callback: (message: any) => void, unsubscribe: () => void }>; // Store callback and unsubscribe
 
     constructor(brokerUrl: string) {
         this.client = new Client({
-            brokerURL: brokerUrl, // Make sure this is pointing to the correct WebSocket endpoint
-            reconnectDelay: 5000, // Automatically reconnect
+            brokerURL: brokerUrl,
+            reconnectDelay: 5000,
             debug: (str: string) => {
-                console.log("WebSocket Debug:", str); // Debug messages for WebSocket connection
+                console.log("WebSocket Debug:", str);
             },
-            webSocketFactory: () => new WebSocket(brokerUrl), // This creates a WebSocket connection directly (no SockJS)
+            webSocketFactory: () => new WebSocket(brokerUrl),
         });
 
         this.subscriptions = new Map();
@@ -37,7 +37,8 @@ class WebSocketService {
     subscribe(destination: string, callback: (message: any) => void): void {
         if (!this.client.connected) {
             console.warn("WebSocket client is not connected. Delaying subscription.");
-            this.subscriptions.set(destination, callback); // Save the callback for later subscription
+            // Store both callback and an empty unsubscribe function for later use
+            this.subscriptions.set(destination, { callback, unsubscribe: () => {} });
             return;
         }
 
@@ -46,21 +47,23 @@ class WebSocketService {
             callback(parsedMessage);
         });
 
-        this.subscriptions.set(destination, () => subscription.unsubscribe()); // Save unsubscribe function
+        // Store both callback and unsubscribe method
+        this.subscriptions.set(destination, { callback, unsubscribe: () => subscription.unsubscribe() });
     }
 
     unsubscribe(destination: string): void {
-        const unsubscribeFn = this.subscriptions.get(destination);
-        if (unsubscribeFn) {
-            unsubscribeFn(); // Unsubscribe from STOMP
+        const subscription = this.subscriptions.get(destination);
+        if (subscription) {
+            subscription.unsubscribe(); // Unsubscribe using the stored unsubscribe function
             this.subscriptions.delete(destination);
         }
     }
 
     private resubscribeAll(): void {
         // Resubscribe to all saved subscriptions when reconnecting
-        this.subscriptions.forEach((callback, destination) => {
-            this.subscribe(destination, callback);
+        this.subscriptions.forEach((subscription, destination) => {
+            // Re-subscribe using the stored callback
+            this.subscribe(destination, subscription.callback);
         });
     }
 }

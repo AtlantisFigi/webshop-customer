@@ -77,7 +77,7 @@
               class="bg-gray-100 hover:bg-gray-200 transition-all duration-300 ease-in-out rounded-lg overflow-hidden"
           >
             <div class="relative w-full mb-1" style="aspect-ratio: 4 / 5">
-              <img :src="product.image" alt="" class="absolute inset-0 w-full h-full object-cover" />
+              <img :src="'https://via.placeholder.com/150'" alt="" class="absolute inset-0 w-full h-full object-cover" />
               <div class="absolute top-2 left-2 bg-black text-white p-2 text-sm">
                 €{{ product.price }}
               </div>
